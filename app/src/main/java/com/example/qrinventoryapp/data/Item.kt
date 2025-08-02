@@ -34,11 +34,11 @@ data class Item(
     @ColumnInfo(name = "inv_cis")
     val invCis: String,
     @ColumnInfo(name = "naz_inv")
-    val nazInv: String,
+    val nazInv: String?,
     @ColumnInfo(name = "vyr_cis")
-    val vyrCis: String,
+    val vyrCis: String?,
     val zarazeno: String,
-    val vyroba: Int,
+    val vyroba: Int?,
     @ColumnInfo(name = "user_id")
     val userId: Int,
     @ColumnInfo(name = "room_id")

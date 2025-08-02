@@ -18,6 +18,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        vectorDrawables {
+            useSupportLibrary = true
+        }
 
     }
 
@@ -75,4 +78,5 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    testImplementation(kotlin("test"))
 }

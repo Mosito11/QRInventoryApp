@@ -16,4 +16,6 @@ interface IncorrectItemDao {
 
     @Query("DELETE FROM items_not_correct")
     suspend fun deleteAll()
+
 }
+
