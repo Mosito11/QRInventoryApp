@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">QR Inventory App</string>
+    <string name="scanscreen_title">Scan Screen</string>
 </resources>
