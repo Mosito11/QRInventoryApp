@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">QR Inventory App</string>
     <string name="scanscreen_title">Scan Screen</string>
+    <string name="homescreen_title">Home Screen</string>
 </resources>
