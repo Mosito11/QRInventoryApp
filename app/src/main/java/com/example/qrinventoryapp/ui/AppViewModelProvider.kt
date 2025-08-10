@@ -11,14 +11,14 @@ import com.example.qrinventoryapp.ui.scan.ScanViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
-        // Initializer for HomeViewModel
+
         initializer {
             HomeViewModel(
                 qrInventoryApplication().container.userEntitiesRepository,
                 qrInventoryApplication().container.roomEntitiesRepository
             )
         }
-        // Initializer for ScanViewModel
+
         initializer {
             ScanViewModel(
                 this.createSavedStateHandle(),

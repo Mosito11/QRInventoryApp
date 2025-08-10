@@ -79,4 +79,5 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.lifecycle.runtime.compose)
     testImplementation(kotlin("test"))
+    testImplementation(libs.kotlin.coroutines.test)
 }

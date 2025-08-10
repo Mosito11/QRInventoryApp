@@ -14,7 +14,7 @@ lifecycleViewModel = "2.9.2"
 navigation = "2.9.3"
 camera = "1.4.2"
 zxingCore = "3.5.3"
-kotlinCoroutines = "1.7.3"
+kotlinCoroutines = "1.9.0"
 room = "2.7.2"
 
 [libraries]
@@ -49,6 +49,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room"}
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinCoroutines"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -57,7 +58,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 
 android-library = { id = "com.android.library", version.ref = "agp"}
 ksp = { id = "com.google.devtools.ksp", version = "2.2.0-2.0.2" }
-
-
-
 

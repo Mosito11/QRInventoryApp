@@ -2,4 +2,10 @@
     <string name="app_name">QR Inventory App</string>
     <string name="scanscreen_title">Scan Screen</string>
     <string name="homescreen_title">Home Screen</string>
+    <string name="user_selection">Select User</string>
+    <string name="room_selection">Select Room</string>
+    <string name="quit">Quit</string>
+    <string name="scan">Scan</string>
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
 </resources>
