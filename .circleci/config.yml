@@ -3,42 +3,15 @@ version: 2.1
 jobs:
   unit-tests:
     docker:
-      - image: cimg/openjdk:17.0 # OpenJDK 17 + základné build nástroje
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
 
-      # Cache Gradle dependencies
       - restore_cache:
           keys:
             - gradle-cache-{{ checksum "build.gradle.kts" }}
             - gradle-cache-
 
-      # Inštalácia Android SDK a potrebných nástrojov
-      - run:
-          name: Install Android SDK
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y wget unzip
-            wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-            mkdir -p $HOME/android-sdk/cmdline-tools
-            unzip commandlinetools-linux-11076708_latest.zip -d $HOME/android-sdk/cmdline-tools
-            mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-            yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk --licenses
-            $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk \
-              "platform-tools" \
-              "platforms;android-34" \
-              "build-tools;34.0.0"
-
-      # Nastavenie prostredia
-      - run:
-          name: Set Environment Variables
-          command: |
-            echo 'export ANDROID_HOME=$HOME/android-sdk' >> $BASH_ENV
-            echo 'export PATH=$ANDROID_HOME/platform-tools:$PATH' >> $BASH_ENV
-            echo 'export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH' >> $BASH_ENV
-            echo 'export PATH=$ANDROID_HOME/build-tools/34.0.0:$PATH' >> $BASH_ENV
-
-      # Spustenie unit testov
       - run:
           name: Run Unit Tests
           command: ./gradlew testDebugUnitTest
@@ -48,7 +21,6 @@ jobs:
             - ~/.gradle
           key: gradle-cache-{{ checksum "build.gradle.kts" }}
 
-      # Uloženie výsledkov testov
       - run:
           name: Store JUnit Results
           command: |
