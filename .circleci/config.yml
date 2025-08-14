@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   unit-tests:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/android:2024.01
     steps:
       - checkout
 
