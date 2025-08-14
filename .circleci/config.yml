@@ -1,0 +1,28 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@3.1.0
+
+jobs:
+  unit-tests:
+    executor:
+      name: android/android-docker
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - run:
+          name: Run Unit Tests
+          command: ./gradlew testDebugUnitTest
+      - android/save-gradle-cache
+      - run:
+          name: Store JUnit Results
+          command: |
+            mkdir -p test-results
+            find . -type f -path "*/build/test-results/**/*.xml" -exec cp {} test-results/ \;
+      - store_test_results:
+          path: test-results
+
+workflows:
+  test-workflow:
+    jobs:
+      - unit-tests
