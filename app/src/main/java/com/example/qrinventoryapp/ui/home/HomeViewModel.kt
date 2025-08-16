@@ -43,15 +43,15 @@ class HomeViewModel(
         }
     }
 
-    fun onModeSelected(mode: AppMode) {
+    fun selectMode(mode: AppMode) {
         _uiState.update { it.copy(selectedMode = mode) }
     }
 
-    fun onUserSelected(userId: Int) {
+    fun selectUser(userId: Int) {
         _uiState.update { it.copy(selectedUserId = userId) }
     }
 
-    fun onRoomSelected(roomId: Int) {
+    fun selectRoom(roomId: Int) {
         _uiState.update { it.copy(selectedRoomId = roomId) }
     }
 }

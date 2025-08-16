@@ -74,38 +74,38 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun onModeSelected_changeSelectedMode() {
-        fakeViewModel.onModeSelected(AppMode.INVENTORY)
+    fun selectMode_changeSelectedMode() {
+        fakeViewModel.selectMode(AppMode.INVENTORY)
         assertEquals(AppMode.INVENTORY, fakeViewModel.uiState.value.selectedMode)
     }
 
     @Test
-    fun onUserSelected_changeSelectedUserId() {
-        fakeViewModel.onUserSelected(5)
+    fun selectUser_changeSelectedUserId() {
+        fakeViewModel.selectUser(5)
         assertEquals(5, fakeViewModel.uiState.value.selectedUserId)
     }
 
     @Test
-    fun onRoomSelected_changeSelectedRoomId() {
-        fakeViewModel.onRoomSelected(10)
+    fun selectRoom_changeSelectedRoomId() {
+        fakeViewModel.selectRoom(10)
         assertEquals(10, fakeViewModel.uiState.value.selectedRoomId)
     }
 
     @Test
     fun isScanEnabled_whenModeSetToCONTROL() {
-        fakeViewModel.onModeSelected(AppMode.CONTROL)
+        fakeViewModel.selectMode(AppMode.CONTROL)
         assertTrue(fakeViewModel.uiState.value.isScanEnabled)
     }
 
     @Test
     fun isScanEnabled_whenModeSetToINVENTORY_andWhenUserAndRoomSelected() {
-        fakeViewModel.onModeSelected(AppMode.INVENTORY)
+        fakeViewModel.selectMode(AppMode.INVENTORY)
         assertEquals(false, fakeViewModel.uiState.value.isScanEnabled)
 
-        fakeViewModel.onUserSelected(1)
+        fakeViewModel.selectUser(1)
         assertEquals(false, fakeViewModel.uiState.value.isScanEnabled)
 
-        fakeViewModel.onRoomSelected(2)
+        fakeViewModel.selectRoom(2)
         assertEquals(true, fakeViewModel.uiState.value.isScanEnabled)
     }
 
@@ -127,7 +127,7 @@ class HomeViewModelTest {
     fun emittingUserByIdUpdatesSelectedUserInUiState() = runTest {
         val testUser = UserEntity(id = 1, name = "Fake User")
         fakeUserRepository.emitUser(testUser)
-        fakeViewModel.onUserSelected(testUser.id)
+        fakeViewModel.selectUser(testUser.id)
         assertEquals(testUser.id, fakeViewModel.uiState.value.selectedUserId)
     }
 
@@ -135,7 +135,7 @@ class HomeViewModelTest {
     fun emittingRoomByIdUpdatesSelectedRoomInUiState() = runTest {
         val testRoom = RoomEntity(id = 1, name = "Fake Room")
         fakeRoomRepository.emitRoom(testRoom)
-        fakeViewModel.onRoomSelected(testRoom.id)
+        fakeViewModel.selectRoom(testRoom.id)
         assertEquals(testRoom.id, fakeViewModel.uiState.value.selectedRoomId)
     }
 }

@@ -8,4 +8,14 @@
     <string name="scan">Scan</string>
     <string name="search">Search</string>
     <string name="cancel">Cancel</string>
+    <string name="qr_not_found">QR code not found in database</string>
+    <string name="no_qr_scanned">No QR scanned</string>
+    <string name="no_user_found">No User found</string>
+    <string name="no_room_found">No Room found</string>
+    <string name="back">Back</string>
+    <string name="save_incorrect_item">Save Incorrect Item</string>
+    <string name="new_scan">New Scan</string>
+    <string name="match">Match</string>
+    <string name="mismatch">Mismatch</string>
+
 </resources>

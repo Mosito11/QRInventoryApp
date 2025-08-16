@@ -66,7 +66,7 @@ fun HomeScreen(
         //Mode Dropdown
         ModeDropdown(
             selectedMode = uiState.selectedMode,
-            onModeSelected = viewModel::onModeSelected
+            onModeSelected = viewModel::selectMode
         )
 
         //Select contact
@@ -106,7 +106,7 @@ fun HomeScreen(
             EntitySelectDialog(
                 title = stringResource(R.string.user_selection),
                 items = uiState.availableUsers.map { it.id to it.name },
-                onSelect = { viewModel.onUserSelected(it) },
+                onSelect = { viewModel.selectUser(it) },
                 onDismiss = { showUserDialog = false }
             )
         }
@@ -116,7 +116,7 @@ fun HomeScreen(
             EntitySelectDialog(
                 title = stringResource(R.string.room_selection),
                 items = uiState.availableRooms.map { it.id to it.name },
-                onSelect = { viewModel.onRoomSelected(it) },
+                onSelect = { viewModel.selectRoom(it) },
                 onDismiss = { showRoomDialog = false }
             )
         }

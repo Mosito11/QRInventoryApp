@@ -23,6 +23,8 @@ object AppViewModelProvider {
             ScanViewModel(
                 this.createSavedStateHandle(),
                 qrInventoryApplication().container.itemsRepository,
+                qrInventoryApplication().container.userEntitiesRepository,
+                qrInventoryApplication().container.roomEntitiesRepository,
                 qrInventoryApplication().container.incorrectItemsRepository
             )
         }
