@@ -1,6 +1,10 @@
 package com.example.qrinventoryapp
 
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.qrinventoryapp.ui.navigation.QRInventoryNavHost
@@ -10,30 +14,14 @@ fun QRInventoryApp(navController: NavHostController = rememberNavController()) {
     QRInventoryNavHost(navController = navController)
 }
 
-/**
- * App bar to display title and conditionally display the back navigation.
- */
-/*@Composable
-fun InventoryTopAppBar(
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun QRInventoryTopAppBar(
     title: String,
-    canNavigateBack: Boolean,
-    modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
-    navigateUp: () -> Unit = {}
+    modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
         title = { Text(title) },
-        modifier = modifier,
-        scrollBehavior = scrollBehavior,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Filled.ArrowBack,
-                        contentDescription = stringResource(string.back_button)
-                    )
-                }
-            }
-        }
+        modifier = modifier
     )
-}*/
+}

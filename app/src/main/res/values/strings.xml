@@ -13,9 +13,11 @@
     <string name="no_user_found">No User found</string>
     <string name="no_room_found">No Room found</string>
     <string name="back">Back</string>
-    <string name="save_incorrect_item">Save Incorrect Item</string>
+    <string name="save_incorrect_item">Save Item</string>
     <string name="new_scan">New Scan</string>
     <string name="match">Match</string>
     <string name="mismatch">Mismatch</string>
+    <string name="topbar_title">Application mode: </string>
+
 
 </resources>

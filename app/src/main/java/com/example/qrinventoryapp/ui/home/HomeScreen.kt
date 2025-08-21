@@ -4,8 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,12 +16,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.qrinventoryapp.QRInventoryTopAppBar
 import com.example.qrinventoryapp.R
 import com.example.qrinventoryapp.data.RoomEntity
 import com.example.qrinventoryapp.data.UserEntity
@@ -57,36 +56,82 @@ fun HomeScreen(
     var showUserDialog by remember { mutableStateOf(false) }
     var showRoomDialog by remember { mutableStateOf(false) }
 
+    Scaffold(
+        topBar = {
+            QRInventoryTopAppBar(title = stringResource(R.string.topbar_title) + " " + uiState.selectedMode.name)
+        }
+    ) {
+        innerPadding ->
+            HomeScreenContent(
+                uiState = uiState,
+                showUserDialog = showUserDialog,
+                showRoomDialog = showRoomDialog,
+                onShowUserDialogChange = { showUserDialog = it },
+                onShowRoomDialogChange = { showRoomDialog = it },
+                onModeSelected = viewModel::selectMode,
+                onUserSelected = viewModel::selectUser,
+                onRoomSelected = viewModel::selectRoom,
+                navigateToScan = navigateToScan,
+                navigateToQuit = navigateToQuit,
+                modifier = modifier,
+                contentPadding = innerPadding
+        )
+    }
+
+
+}
+
+@Composable
+fun HomeScreenContent(
+    uiState: HomeUiState,
+    showUserDialog: Boolean,
+    showRoomDialog: Boolean,
+    onShowUserDialogChange: (Boolean) -> Unit,
+    onShowRoomDialogChange: (Boolean) -> Unit,
+    onModeSelected: (AppMode) -> Unit,
+    onUserSelected: (Int) -> Unit,
+    onRoomSelected: (Int) -> Unit,
+    navigateToScan: (AppMode, Int?, Int?) -> Unit,
+    navigateToQuit: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(contentPadding)
             .padding(16.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        //Mode Dropdown
+        val buttonWidth = 200.dp
+        // Mode Dropdown
         ModeDropdown(
             selectedMode = uiState.selectedMode,
-            onModeSelected = viewModel::selectMode
+            onModeSelected = onModeSelected,
+            modifier = Modifier.width(buttonWidth)
         )
 
-        //Select contact
+        // User & Room selection
         if (uiState.selectedMode == AppMode.INVENTORY) {
             Button(
-                onClick = { showUserDialog = true },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { onShowUserDialogChange(true) },
+                modifier = Modifier.width(buttonWidth)
             ) {
-                Text(uiState.availableUsers.firstOrNull { it.id == uiState.selectedUserId }?.name ?: stringResource(R.string.user_selection))
+                Text(uiState.availableUsers.firstOrNull { it.id == uiState.selectedUserId }?.name
+                    ?: stringResource(R.string.user_selection))
             }
 
             Button(
-                onClick = { showRoomDialog = true },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { onShowRoomDialogChange(true) },
+                modifier = Modifier.width(buttonWidth)
             ) {
-                Text(uiState.availableRooms.firstOrNull { it.id == uiState.selectedRoomId }?.name ?: stringResource(R.string.room_selection))
+                Text(uiState.availableRooms.firstOrNull { it.id == uiState.selectedRoomId }?.name
+                    ?: stringResource(R.string.room_selection))
             }
         }
 
-        //Buttons
+        // Buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -102,12 +147,13 @@ fun HomeScreen(
             }
         }
 
+        // User dialog
         if (showUserDialog) {
             EntitySelectDialog(
                 title = stringResource(R.string.user_selection),
                 items = uiState.availableUsers.map { it.id to it.name },
-                onSelect = { viewModel.selectUser(it) },
-                onDismiss = { showUserDialog = false }
+                onSelect = onUserSelected,
+                onDismiss = { onShowUserDialogChange(false) }
             )
         }
 
@@ -116,12 +162,13 @@ fun HomeScreen(
             EntitySelectDialog(
                 title = stringResource(R.string.room_selection),
                 items = uiState.availableRooms.map { it.id to it.name },
-                onSelect = { viewModel.selectRoom(it) },
-                onDismiss = { showRoomDialog = false }
+                onSelect = onRoomSelected,
+                onDismiss = { onShowRoomDialogChange(false) }
             )
         }
     }
 }
+
 
 @Composable
 private fun ModeDropdown(
@@ -198,7 +245,6 @@ private fun EntitySelectDialog(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
@@ -217,77 +263,23 @@ fun HomeScreenPreview() {
             RoomEntity(3, "Storage")
         )
     )
-
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Application mode: " + fakeUiState.selectedMode.name) })
-        },
-        content = { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-
-                Column(
-                    modifier = Modifier
-                        //.fillMaxSize()
-                        .width(300.dp)
-                        .padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(100.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    ModeDropdown(
-                        selectedMode = fakeUiState.selectedMode,
-                        onModeSelected = { },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    if (fakeUiState.selectedMode == AppMode.INVENTORY) {
-                        Button(
-                            onClick = { },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                fakeUiState.availableUsers.firstOrNull { it.id == fakeUiState.selectedUserId }?.name
-                                    ?: stringResource(R.string.user_selection)
-                            )
-                        }
-
-                        Button(
-                            onClick = { },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                fakeUiState.availableRooms.firstOrNull { it.id == fakeUiState.selectedRoomId }?.name
-                                    ?: stringResource(R.string.room_selection)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Button(onClick = {}, modifier = Modifier.weight(1f)) {
-                            Text("Quit")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Button(
-                            onClick = {},
-                            modifier = Modifier.weight(1f),
-                            enabled = fakeUiState.isScanEnabled
-                        ) {
-                            Text("Scan")
-                        }
-                    }
-                }
-            }
+            QRInventoryTopAppBar(title = stringResource(R.string.topbar_title) + " " + fakeUiState.selectedMode.name)
         }
-    )
+    ) { innerPadding ->
+        HomeScreenContent(
+            uiState = fakeUiState,
+            showUserDialog = false,
+            showRoomDialog = false,
+            onShowUserDialogChange = {},
+            onShowRoomDialogChange = {},
+            onModeSelected = {},
+            onUserSelected = {},
+            onRoomSelected = {},
+            navigateToScan = { _, _, _ -> },
+            navigateToQuit = {},
+            contentPadding = innerPadding
+        )
+    }
 }
