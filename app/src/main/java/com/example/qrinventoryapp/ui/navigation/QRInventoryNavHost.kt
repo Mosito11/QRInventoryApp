@@ -47,7 +47,8 @@ fun QRInventoryNavHost(
                 nullable = true
                 defaultValue = null
             }
-        )) { backStackEntry ->
+            )
+        ) { backStackEntry ->
                 ScanScreen(
                     navigateBack = { navController.popBackStack()  },
                     saveIncorrectItem = { /*item ->  viewModel.save(item) */ },
