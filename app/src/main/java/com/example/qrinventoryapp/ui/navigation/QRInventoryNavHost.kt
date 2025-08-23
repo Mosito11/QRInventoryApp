@@ -39,13 +39,13 @@ fun QRInventoryNavHost(
             },
             navArgument(ScanScreenDestination.userIdArg) {
                 type = NavType.IntType
-                nullable = true
-                defaultValue = null
+                //nullable = true nemoze byt Int nullable
+                defaultValue = -1
             },
             navArgument(ScanScreenDestination.roomIdArg) {
                 type = NavType.IntType
-                nullable = true
-                defaultValue = null
+                //nullable = true nemoze byt Int nullable
+                defaultValue = -1
             }
             )
         ) { backStackEntry ->

@@ -29,13 +29,19 @@ class ScanViewModel(
     val selectedMode = AppMode.valueOf(
         savedStateHandle[ScanScreenDestination.modeArg] ?: AppMode.CONTROL.name
     )
+    /*
     val selectedUserId: Int? = savedStateHandle[ScanScreenDestination.userIdArg]
     val selectedRoomId: Int? = savedStateHandle[ScanScreenDestination.roomIdArg]
+*/
+    val selectedUserId: Int? = savedStateHandle.get<Int>(ScanScreenDestination.userIdArg) ?.takeIf { it != -1 }  // ak je -1, premeníme na null
+    val selectedRoomId: Int? = savedStateHandle.get<Int>(ScanScreenDestination.roomIdArg) ?.takeIf { it != -1 }
 
     private val _uiState = MutableStateFlow(ScanUiState())
     val uiState: StateFlow<ScanUiState> = _uiState.asStateFlow()
 
     fun processScannedCode(qrCode: String) {
+        if (_uiState.value.qr == qrCode) return //pre pripad duplicitneho skenovania?
+
         viewModelScope.launch {
             val item = itemsRepository.getItemByQrStream(qrCode).firstOrNull()
             if (item != null) {

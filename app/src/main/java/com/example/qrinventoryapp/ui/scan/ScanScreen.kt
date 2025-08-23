@@ -124,7 +124,6 @@ fun ScanScreenContent(
             Text(text = "TODO: Camera Preview")
         }
 
-        // textové polia pre výsledok
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,7 +138,6 @@ fun ScanScreenContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // user match
             Row {
                 Text(uiState.userNameFromDB ?: stringResource(R.string.no_user_found))
                 Spacer(Modifier.width(8.dp))
@@ -152,7 +150,6 @@ fun ScanScreenContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // room match
             Row {
                 Text(uiState.roomNameFromDB ?: stringResource(R.string.no_room_found))
                 Spacer(Modifier.width(4.dp))
@@ -173,7 +170,6 @@ fun ScanScreenContent(
             }
         }
 
-        // buttony
         Row(
             modifier = Modifier
                 .fillMaxWidth()
