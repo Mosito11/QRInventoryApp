@@ -33,7 +33,7 @@ class ScanViewModel(
     val selectedUserId: Int? = savedStateHandle[ScanScreenDestination.userIdArg]
     val selectedRoomId: Int? = savedStateHandle[ScanScreenDestination.roomIdArg]
 */
-    val selectedUserId: Int? = savedStateHandle.get<Int>(ScanScreenDestination.userIdArg) ?.takeIf { it != -1 }  // ak je -1, premeníme na null
+    val selectedUserId: Int? = savedStateHandle.get<Int>(ScanScreenDestination.userIdArg) ?.takeIf { it != -1 }  // ak je -1, Int = null nemoze byt v NavHoste
     val selectedRoomId: Int? = savedStateHandle.get<Int>(ScanScreenDestination.roomIdArg) ?.takeIf { it != -1 }
 
     private val _uiState = MutableStateFlow(ScanUiState())

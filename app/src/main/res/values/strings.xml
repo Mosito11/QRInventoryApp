@@ -18,6 +18,6 @@
     <string name="match">Match</string>
     <string name="mismatch">Mismatch</string>
     <string name="topbar_title">Application mode: </string>
-
+    <string name="permission_not_granted">QR code can not be read without camera </string>
 
 </resources>
