@@ -1,12 +1,12 @@
 package com.example.qrinventoryapp.ui.scan
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.qrinventoryapp.R
 import com.example.qrinventoryapp.data.IncorrectItem
 import com.example.qrinventoryapp.data.IncorrectItemsRepository
-import com.example.qrinventoryapp.data.Item
 import com.example.qrinventoryapp.data.ItemsRepository
 import com.example.qrinventoryapp.data.RoomEntitiesRepository
 import com.example.qrinventoryapp.data.UserEntitiesRepository
@@ -58,16 +58,16 @@ class ScanViewModel(
                     userMatch = userMatchFound,
                     roomMatch = roomMatchFound
                 )
-
+                /*
                 if (userMatchFound == false || roomMatchFound == false) {
                     insertIncorrectItemToDB(item)
-                }
+                }*/
             } else {
                 _uiState.value = ScanUiState(errorTextId = R.string.qr_not_found)
             }
         }
     }
-
+/*
     private suspend fun insertIncorrectItemToDB(item: Item) {
         val selectedUserIdForDB = requireNotNull(selectedUserId)
         val selectedRoomIdForDB = requireNotNull(selectedRoomId)
@@ -82,10 +82,47 @@ class ScanViewModel(
                 )
             )
     }
+*/
+    fun saveIncorrectItem() {
+    val currentUiState = _uiState.value
+    val qr = currentUiState.qr ?: return
+    val selectedUserIdForDB = requireNotNull(selectedUserId)
+    val selectedRoomIdForDB = requireNotNull(selectedRoomId)
+
+    viewModelScope.launch() {
+
+        val item = itemsRepository.getItemByQrStream(qr).firstOrNull() ?: return@launch
+
+        val exists = incorrectItemsRepository.existsByQr(qr)
+        if (exists) {
+            _uiState.value =
+                currentUiState.copy(snackBarMessageId = R.string.incorrect_item_already_exists)
+            return@launch
+        }
+
+        Log.d("ScanViewModel", "Inserting incorrect item: ${item.qr}")
+        incorrectItemsRepository.insert(
+            IncorrectItem(
+                qr = qr,
+                userFromDatabase = item.userId,
+                userSelected = selectedUserIdForDB,
+                roomFromDatabase = item.roomId,
+                roomSelected = selectedRoomIdForDB
+            )
+        )
+
+        clearScan()
+    }
+}
 
     fun clearScan(errorTextId: Int? = null) {
         _uiState.value = ScanUiState(errorTextId = errorTextId)
     }
+
+    fun clearSnackBarMessage() {
+        _uiState.value = _uiState.value.copy(snackBarMessageId = null)
+    }
+
 }
 
 data class ScanUiState(
@@ -94,5 +131,6 @@ data class ScanUiState(
     val roomNameFromDB: String? = null,
     val errorTextId: Int? = null,
     val userMatch: Boolean? = null,
-    val roomMatch: Boolean? = null
+    val roomMatch: Boolean? = null,
+    val snackBarMessageId: Int? = null
 )

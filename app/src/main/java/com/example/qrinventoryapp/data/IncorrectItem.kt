@@ -43,6 +43,7 @@ import java.time.LocalDate
         Index("room_selected")
     ]
 )
+
 data class IncorrectItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

@@ -17,5 +17,7 @@ interface IncorrectItemDao {
     @Query("DELETE FROM items_not_correct")
     suspend fun deleteAll()
 
+    @Query("SELECT COUNT(*) FROM items_not_correct WHERE qr = :qr")
+    suspend fun countByQr(qr: String): Int
 }
 

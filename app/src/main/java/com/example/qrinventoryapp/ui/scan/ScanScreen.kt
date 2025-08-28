@@ -28,10 +28,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -95,10 +100,24 @@ fun ScanScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
+    val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarMessage = uiState.snackBarMessageId?.let { stringResource(id = it) }
+
+    LaunchedEffect(uiState.snackBarMessageId) {
+        snackBarMessage?.let { msg ->
+            snackBarHostState.showSnackbar(
+                message = msg,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.clearSnackBarMessage()
+        }
+    }
+
     Scaffold(
         topBar = {
             QRInventoryTopAppBar(title = stringResource(R.string.topbar_title) + " " + mode.name)
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { innerPadding ->
 
         ScanScreenContent(

@@ -3,16 +3,20 @@ package com.example.qrinventoryapp.ui.navigation
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.qrinventoryapp.ui.AppViewModelProvider
 import com.example.qrinventoryapp.ui.home.AppMode
 import com.example.qrinventoryapp.ui.home.HomeDestination
 import com.example.qrinventoryapp.ui.home.HomeScreen
 import com.example.qrinventoryapp.ui.scan.ScanScreen
 import com.example.qrinventoryapp.ui.scan.ScanScreenDestination
+import com.example.qrinventoryapp.ui.scan.ScanViewModel
 
 @Composable
 fun QRInventoryNavHost(
@@ -49,10 +53,12 @@ fun QRInventoryNavHost(
             }
             )
         ) { backStackEntry ->
+                val viewModel: ScanViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
                 ScanScreen(
                     navigateBack = { navController.popBackStack()  },
-                    saveIncorrectItem = { /*item ->  viewModel.save(item) */ },
-                    newScan = { /* reset state and trigger new scan */ },
+                    saveIncorrectItem = { viewModel.saveIncorrectItem() },
+                    newScan = { viewModel.clearScan() },
                     navBackStackEntry = backStackEntry
                 )
             }

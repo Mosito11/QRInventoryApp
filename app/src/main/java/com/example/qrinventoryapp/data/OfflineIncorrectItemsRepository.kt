@@ -10,4 +10,5 @@ class OfflineIncorrectItemsRepository(private val incorrectItemDao: IncorrectIte
 
     override suspend fun deleteAllIncorrectItems() = incorrectItemDao.deleteAll()
 
+    override suspend fun existsByQr(qr: String): Boolean = incorrectItemDao.countByQr(qr) > 0
 }

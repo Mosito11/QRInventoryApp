@@ -19,5 +19,6 @@
     <string name="mismatch">Mismatch</string>
     <string name="topbar_title">Application mode: </string>
     <string name="permission_not_granted">QR code can not be read without camera </string>
+    <string name="incorrect_item_already_exists">Item already listed in tab </string>
 
 </resources>
