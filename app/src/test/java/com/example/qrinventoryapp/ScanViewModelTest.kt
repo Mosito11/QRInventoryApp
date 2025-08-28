@@ -13,12 +13,14 @@ import com.example.qrinventoryapp.ui.home.AppMode
 import com.example.qrinventoryapp.ui.scan.ScanScreenDestination
 import com.example.qrinventoryapp.ui.scan.ScanViewModel
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -268,5 +270,28 @@ class ScanViewModelTest {
         assertNull(stateAfterClearScan.roomNameFromDB)
         assertNull(stateAfterClearScan.userMatch)
         assertNull(stateAfterClearScan.roomMatch)
+    }
+
+    @Test
+    fun existsByQr_returnTrueWhenExist() = runBlocking {
+        val testIncorrectItem = IncorrectItem(
+            id = 1,
+            qr = "QR123",
+            userFromDatabase = 7,
+            userSelected = 1,
+            roomFromDatabase = 10,
+            roomSelected = 10,
+        )
+
+        fakeIncorrectItemsRepository.insert(testIncorrectItem)
+
+        val exists = fakeIncorrectItemsRepository.existsByQr("QR123")
+        assertTrue(exists)
+    }
+
+    @Test
+    fun existsByQr_returnFalseWhenDoesNotExist() = runBlocking {
+        val exists = fakeIncorrectItemsRepository.existsByQr("QR999")
+        assertFalse(exists)
     }
 }

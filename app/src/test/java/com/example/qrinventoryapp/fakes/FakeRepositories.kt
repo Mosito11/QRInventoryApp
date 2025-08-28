@@ -78,4 +78,8 @@ class FakeIncorrectItemsRepository : IncorrectItemsRepository {
         _incorrectItems.clear()
         _flowAll.emit(_incorrectItems.toList())
     }
+
+    override suspend fun existsByQr(qr: String): Boolean {
+        return _incorrectItems.count { it.qr == qr } > 0
+    }
 }
